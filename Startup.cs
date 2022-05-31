@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -31,7 +30,6 @@ namespace Redarbor
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(Options => Options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             services.AddAutoMapper(typeof(Mappers));
@@ -60,30 +58,6 @@ namespace Redarbor
                 var archivoXmlComentarios = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var rutaApiComentarios = Path.Combine(AppContext.BaseDirectory, archivoXmlComentarios);
                 options.IncludeXmlComments(rutaApiComentarios);
-
-                //Primero definir el esquema de seguridad
-                options.AddSecurityDefinition("Bearer",
-                    new OpenApiSecurityScheme
-                    {
-                        Description = "Autenticación JWT (Bearer)",
-                        Type = SecuritySchemeType.Http,
-                        Scheme = "bearer"
-                    });
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement{
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Id = "Bearer",
-                                Type = ReferenceType.SecurityScheme
-                            }
-                        }, new List<string>()
-                    }
-                  });
-
-
             });
 
             services.AddControllers().AddJsonOptions(options =>
@@ -123,17 +97,11 @@ namespace Redarbor
                 options.SwaggerEndpoint("swagger/ApiRedarbor/swagger.json", "API Redarbor");
 
                 //Para la publicación en IIS descomentar estas líneas y comentar las de arriba
-                //options.SwaggerEndpoint("APIRedarbor/swagger/ApiUsers/swagger.json", "API Users");
+                //options.SwaggerEndpoint("APIRedarbor/swagger/ApiRedarbor/swagger.json", "API Users");
                 options.RoutePrefix = "";
             });
 
             app.UseRouting();
-
-            /*Estos dos son para la autenticación y autorización*/
-            //app.UseAuthentication();
-            //app.UseAuthorization();
-
-            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

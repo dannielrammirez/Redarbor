@@ -1,6 +1,7 @@
 ﻿using APIRedarbor.Models;
 using APIRedarbor.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -14,6 +15,10 @@ namespace APIRedarbor.Repository
 {
     public class EmployeeRepository : Repository<Employee>, IEmployeeRepository
     {
+        public EmployeeRepository(IConfiguration configuration) : base(configuration)
+        {
+        }
+
         public Employee CreateEmployee(Employee employee)
         {
             var serialize = JsonConvert.SerializeObject(this);

@@ -1,6 +1,7 @@
 ﻿using APIRedarbor.Models;
 using APIRedarbor.Repository.IRepository;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace APIRedarbor.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         public static string sqlDataSource;
-        public Repository()
+        private readonly IConfiguration _configuration;
+        public Repository(IConfiguration configuration)
         {
-            sqlDataSource = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Redarbor;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            _configuration = configuration;
+            sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
         }
 
         public int ExecuteData(string str, bool isCreate, params IDataParameter[] sqlParams)
