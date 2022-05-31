@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>APIRedarbor</name>
+    </assembly>
+    <members>
+        <member name="M:Redarbor.Controllers.RedarborController.GetAllEmployees">
+            <summary>
+            Listar todos los empleados
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Redarbor.Controllers.RedarborController.GetEmployee(System.Int32)">
+            <summary>
+            Listar empleado especifico
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Redarbor.Controllers.RedarborController.AddEmployee(APIRedarbor.Models.Dtos.EmployeeDto)">
+            <summary>
+            Insertar empleado
+            </summary>
+            <param name="employeeDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Redarbor.Controllers.RedarborController.UpdateEmployee(System.Int32,APIRedarbor.Models.Dtos.EmployeeDto)">
+            <summary>
+            Actualizar empleado
+            </summary>
+            <param name="id"></param>
+            <param name="employeeDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Redarbor.Controllers.RedarborController.DeleteEmployee(System.Int32)">
+            <summary>
+            Eliminar empleado
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
