@@ -121,10 +121,10 @@ namespace Redarbor.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
-        [ProducesResponseType(201, Type = typeof(EmployeeDto))]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpDelete("{id:int}", Name = "DeleteEmployee")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DeleteEmployee(int id)
         {
@@ -134,7 +134,7 @@ namespace Redarbor.Controllers
 
             if (!_repoEmployee.DeleteEmployeeById(id))
             {
-                ModelState.AddModelError("", "Algo salio mal borrando el evento");
+                ModelState.AddModelError("", "Algo salio mal borrando el empleado");
                 return StatusCode(500, ModelState);
             }
 
