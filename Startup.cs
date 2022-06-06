@@ -94,10 +94,10 @@ namespace Redarbor
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("swagger/ApiRedarbor/swagger.json", "API Redarbor");
+                //options.SwaggerEndpoint("swagger/ApiRedarbor/swagger.json", "API Redarbor");
 
                 //Para la publicación en IIS descomentar estas líneas y comentar las de arriba
-                //options.SwaggerEndpoint("APIRedarbor/swagger/ApiRedarbor/swagger.json", "API Users");
+                options.SwaggerEndpoint("swagger/ApiRedarbor/swagger.json", "API Employees");
                 options.RoutePrefix = "";
             });
 

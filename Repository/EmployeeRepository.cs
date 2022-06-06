@@ -1,4 +1,5 @@
-﻿using APIRedarbor.Models;
+﻿using APIRedarbor.Enums;
+using APIRedarbor.Models;
 using APIRedarbor.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -52,19 +53,17 @@ namespace APIRedarbor.Repository
         public bool DeleteEmployeeById(int idEmployee)
         {
             bool resp = false;
-
-            var serialize = JsonConvert.SerializeObject(this);
-            JObject jobject = JObject.Parse(serialize);
-            string query = "DELETE FROM Employee WHERE Id = @Id";
-
-            var parameters = new IDataParameter[]
+            try
             {
-                new SqlParameter("@Id", idEmployee.ToString()),
-            };
-
-            if (ExecuteData(query, isCreate: false, parameters) > 0)
+                var employee = GetEmployeeById(idEmployee);
+                employee.StatusId = (int) EnumStatus.Eliminado;
+                UpdateEmployee(employee);
                 resp = true;
-
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             return resp;
         }
 
