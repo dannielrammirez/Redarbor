@@ -77,7 +77,6 @@ namespace Redarbor.Controllers
             if (employeeDto == null) return BadRequest(ModelState);
 
             var itemSaved = _repoEmployee.CreateEmployee(_mapper.Map<Employee>(employeeDto));
-            EmployeeDto objEmployeeDto = _mapper.Map<EmployeeDto>(itemSaved);
 
             if (itemSaved.Id == 0)
             {
@@ -129,8 +128,6 @@ namespace Redarbor.Controllers
         public IActionResult DeleteEmployee(int id)
         {
             if (!_repoEmployee.ExistEmployee(id)) return NotFound();
-
-            var itemEmployee = _repoEmployee.GetEmployeeById(id);
 
             if (!_repoEmployee.DeleteEmployeeById(id))
             {

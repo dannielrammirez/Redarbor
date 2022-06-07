@@ -1,16 +1,11 @@
 ﻿using APIRedarbor.Enums;
 using APIRedarbor.Models;
 using APIRedarbor.Repository.IRepository;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace APIRedarbor.Repository
 {
@@ -23,7 +18,6 @@ namespace APIRedarbor.Repository
         public Employee CreateEmployee(Employee employee)
         {
             var serialize = JsonConvert.SerializeObject(this);
-            JObject jobject = JObject.Parse(serialize);
             string query = "INSERT INTO Employee VALUES " +
                "(@CompanyId, @CreatedOn, @DeletedOn, @Email, @Fax, @Name, @LastLogin, @Password, @PortalId, @RoleId, @StatusId, @Telephone, @UpdatedOn, @Username);";
 
@@ -52,18 +46,13 @@ namespace APIRedarbor.Repository
 
         public bool DeleteEmployeeById(int idEmployee)
         {
-            bool resp = false;
-            try
-            {
-                var employee = GetEmployeeById(idEmployee);
-                employee.StatusId = (int) EnumStatus.Eliminado;
-                UpdateEmployee(employee);
-                resp = true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            bool resp;
+            
+            var employee = GetEmployeeById(idEmployee);
+            employee.StatusId = (int)EnumStatus.Eliminado;
+            UpdateEmployee(employee);
+            resp = true;
+
             return resp;
         }
 
@@ -73,7 +62,7 @@ namespace APIRedarbor.Repository
 
             var employee = GetData<Employee>(query);
 
-            return employee != null ? true : false;
+            return employee != null;
         }
 
         public ICollection<Employee> GetAllEmployees()
@@ -98,7 +87,6 @@ namespace APIRedarbor.Repository
             bool resp = false;
 
             var serialize = JsonConvert.SerializeObject(this);
-            JObject jobject = JObject.Parse(serialize);
             string query = "UPDATE Employee" +
                 " SET CompanyId = @CompanyId" +
                 ", CreatedOn = @CreatedOn" +

@@ -1,55 +1,45 @@
-﻿using APIRedarbor.Models;
-using APIRedarbor.Repository.IRepository;
+﻿using APIRedarbor.Repository.IRepository;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace APIRedarbor.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        public static string sqlDataSource;
+        private readonly string _sqlDataSource;
         private readonly IConfiguration _configuration;
         public Repository(IConfiguration configuration)
         {
             _configuration = configuration;
-            sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
+            _sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
         }
 
-        public int ExecuteData(string str, bool isCreate, params IDataParameter[] sqlParams)
+        public int ExecuteData(string str, bool isCreate = true, params IDataParameter[] sqlParams)
         {
             int rowId = -1;
 
             if(isCreate) str += " SELECT SCOPE_IDENTITY()";
 
-            try
+            using (SqlConnection conn = new SqlConnection(_sqlDataSource))
             {
-                using (SqlConnection conn = new SqlConnection(sqlDataSource))
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(str, conn))
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(str, conn))
+                    if (sqlParams != null)
                     {
-                        if (sqlParams != null)
+                        foreach (IDataParameter para in sqlParams)
                         {
-                            foreach (IDataParameter para in sqlParams)
-                            {
-                                cmd.Parameters.Add(para);
-                            }
-
-                            rowId = isCreate ? Convert.ToInt32(cmd.ExecuteScalar()) : cmd.ExecuteNonQuery();
+                            cmd.Parameters.Add(para);
                         }
+
+                        rowId = isCreate ? Convert.ToInt32(cmd.ExecuteScalar()) : cmd.ExecuteNonQuery();
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                
             }
 
             return rowId;
@@ -59,19 +49,11 @@ namespace APIRedarbor.Repository
         {
             ICollection<T1> result = default(ICollection<T1>);
 
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            using (SqlConnection connection = new SqlConnection(_sqlDataSource))
             {
-                SqlCommand command = new SqlCommand(str, connection);
-                try
+                using (var reader = connection.QueryMultiple(str))
                 {
-                    using (var reader = connection.QueryMultiple(str))
-                    {
-                        result = reader.Read<T1>().ToList();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
+                    result = reader.Read<T1>().ToList();
                 }
             }
 
@@ -82,19 +64,11 @@ namespace APIRedarbor.Repository
         {
             T1 result = default(T1);
 
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            using (SqlConnection connection = new SqlConnection(_sqlDataSource))
             {
-                SqlCommand command = new SqlCommand(str, connection);
-                try
+                using (var reader = connection.QueryMultiple(str))
                 {
-                    using (var reader = connection.QueryMultiple(str))
-                    {
-                        result = reader.Read<T1>().FirstOrDefault();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
+                    result = reader.Read<T1>().FirstOrDefault();
                 }
             }
 

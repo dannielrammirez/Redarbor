@@ -2,25 +2,8 @@
 {
     public class Portal
     {
-        private int id;
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
-
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
-        private string description;
-        public string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
+        public int Id { get; set; }
+        public int Name { get; set; }
+        public int Description { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using APIRedarbor.Helpers;
 using APIRedarbor.Mapper;
 using APIRedarbor.Repository;
 using APIRedarbor.Repository.IRepository;
+using APIRedarbor.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -46,12 +47,12 @@ namespace Redarbor
                     {
                         Email = "dannielrammirez@gmail.com",
                         Name = "Daniel Ramirez",
-                        Url = new Uri("https://dannielrammirez.github.io/curriculum.github.io/")
+                        Url = new Uri(CT.UrlMyCurriculum)
                     },
                     License = new OpenApiLicense()
                     {
                         Name = "MIT License",
-                        Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+                        Url = new Uri(CT.UrlLicenceMIT)
                     }
                 });
 
@@ -94,8 +95,6 @@ namespace Redarbor
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                //options.SwaggerEndpoint("swagger/ApiRedarbor/swagger.json", "API Redarbor");
-
                 //Para la publicación en IIS descomentar estas líneas y comentar las de arriba
                 options.SwaggerEndpoint("swagger/ApiRedarbor/swagger.json", "API Employees");
                 options.RoutePrefix = "";
