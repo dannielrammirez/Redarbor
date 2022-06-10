@@ -120,7 +120,7 @@ namespace Redarbor.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id:int}", Name = "DeleteEmployee")]
+        [HttpDelete("DeleteEmployee/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -132,6 +132,29 @@ namespace Redarbor.Controllers
             if (!_repoEmployee.DeleteEmployeeById(id))
             {
                 ModelState.AddModelError("", "Algo salio mal borrando el empleado");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Eliminar Permanentemente
+        /// </summary>
+        /// <param name="idDelete"></param>
+        /// <returns></returns>
+        [HttpDelete("DeleteDBEmployee/{idDelete}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult DeleteDBEmployee(int idDelete)
+        {
+            if (!_repoEmployee.ExistEmployee(idDelete)) return NotFound();
+
+            if (!_repoEmployee.DeleteDBEmployeeById(idDelete))
+            {
+                ModelState.AddModelError("", "Algo salio mal borrando completamente el empleado");
                 return StatusCode(500, ModelState);
             }
 

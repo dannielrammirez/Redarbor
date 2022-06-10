@@ -64,7 +64,7 @@ namespace APIRedarbor.Repository
 
             var parameters = new IDataParameter[] { new SqlParameter("@Id", idEmployee) };
 
-            successTran = ExecuteData(query, isCreate: true, parameters);
+            successTran = ExecuteData(query, isCreate: false, parameters);
             resp = successTran > 0;
 
             return resp;

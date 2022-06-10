@@ -39,5 +39,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Redarbor.Controllers.RedarborController.DeleteDBEmployee(System.Int32)">
+            <summary>
+            Eliminar Permanentemente
+            </summary>
+            <param name="idDelete"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
