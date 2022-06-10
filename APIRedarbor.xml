@@ -34,7 +34,7 @@
         </member>
         <member name="M:Redarbor.Controllers.RedarborController.DeleteEmployee(System.Int32)">
             <summary>
-            Eliminar empleado
+            Eliminar empleado (Actualiza a estado eliminado)
             </summary>
             <param name="id"></param>
             <returns></returns>

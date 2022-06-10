@@ -11,5 +11,6 @@ namespace APIRedarbor.Repository.IRepository
         Employee GetEmployeeById(int idEmployee);
         bool UpdateEmployee(Employee employee);
         bool DeleteEmployeeById(int idEmployee);
+        bool DeleteDBEmployeeById(int idEmployee);
     }
 }

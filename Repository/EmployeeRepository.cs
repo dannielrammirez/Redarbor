@@ -17,7 +17,6 @@ namespace APIRedarbor.Repository
 
         public Employee CreateEmployee(Employee employee)
         {
-            var serialize = JsonConvert.SerializeObject(this);
             string query = "INSERT INTO Employee VALUES " +
                "(@CompanyId, @CreatedOn, @DeletedOn, @Email, @Fax, @Name, @LastLogin, @Password, @PortalId, @RoleId, @StatusId, @Telephone, @UpdatedOn, @Username);";
 
@@ -47,11 +46,26 @@ namespace APIRedarbor.Repository
         public bool DeleteEmployeeById(int idEmployee)
         {
             bool resp;
-            
+
             var employee = GetEmployeeById(idEmployee);
             employee.StatusId = (int)EnumStatus.Eliminado;
             UpdateEmployee(employee);
             resp = true;
+
+            return resp;
+        }
+
+        public bool DeleteDBEmployeeById(int idEmployee)
+        {
+            bool resp;
+            int successTran = 0;
+
+            string query = "DELETE Employee WHERE Id = @Id";
+
+            var parameters = new IDataParameter[] { new SqlParameter("@Id", idEmployee) };
+
+            successTran = ExecuteData(query, isCreate: true, parameters);
+            resp = successTran > 0;
 
             return resp;
         }
@@ -86,7 +100,6 @@ namespace APIRedarbor.Repository
         {
             bool resp = false;
 
-            var serialize = JsonConvert.SerializeObject(this);
             string query = "UPDATE Employee" +
                 " SET CompanyId = @CompanyId" +
                 ", CreatedOn = @CreatedOn" +

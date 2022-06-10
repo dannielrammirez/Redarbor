@@ -116,7 +116,7 @@ namespace Redarbor.Controllers
         }
 
         /// <summary>
-        /// Eliminar empleado
+        /// Eliminar empleado (Actualiza a estado eliminado)
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

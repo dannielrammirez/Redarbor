@@ -19,26 +19,24 @@ namespace APIRedarbor.Repository
             _sqlDataSource = _configuration.GetConnectionString("DefaultConnection");
         }
 
-        public int ExecuteData(string str, bool isCreate = true, params IDataParameter[] sqlParams)
+        public int ExecuteData(string str, bool isCreate, params IDataParameter[] sqlParams)
         {
             int rowId = -1;
 
             if(isCreate) str += " SELECT SCOPE_IDENTITY()";
 
-            using (SqlConnection conn = new SqlConnection(_sqlDataSource))
+            using (SqlConnection conn = new(_sqlDataSource))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand(str, conn))
+                using SqlCommand cmd = new(str, conn);
+                if (sqlParams != null)
                 {
-                    if (sqlParams != null)
+                    foreach (IDataParameter para in sqlParams)
                     {
-                        foreach (IDataParameter para in sqlParams)
-                        {
-                            cmd.Parameters.Add(para);
-                        }
-
-                        rowId = isCreate ? Convert.ToInt32(cmd.ExecuteScalar()) : cmd.ExecuteNonQuery();
+                        cmd.Parameters.Add(para);
                     }
+
+                    rowId = isCreate ? Convert.ToInt32(cmd.ExecuteScalar()) : cmd.ExecuteNonQuery();
                 }
             }
 
@@ -47,14 +45,12 @@ namespace APIRedarbor.Repository
 
         public ICollection<T1> GetDataList<T1>(string str)
         {
-            ICollection<T1> result = default(ICollection<T1>);
+            ICollection<T1> result = default;
 
-            using (SqlConnection connection = new SqlConnection(_sqlDataSource))
+            using (SqlConnection connection = new(_sqlDataSource))
             {
-                using (var reader = connection.QueryMultiple(str))
-                {
-                    result = reader.Read<T1>().ToList();
-                }
+                using var reader = connection.QueryMultiple(str);
+                result = reader.Read<T1>().ToList();
             }
 
             return result;
@@ -62,14 +58,12 @@ namespace APIRedarbor.Repository
 
         public T1 GetData<T1>(string str)
         {
-            T1 result = default(T1);
+            T1 result = default;
 
-            using (SqlConnection connection = new SqlConnection(_sqlDataSource))
+            using (SqlConnection connection = new(_sqlDataSource))
             {
-                using (var reader = connection.QueryMultiple(str))
-                {
-                    result = reader.Read<T1>().FirstOrDefault();
-                }
+                using var reader = connection.QueryMultiple(str);
+                result = reader.Read<T1>().FirstOrDefault();
             }
 
             return result;
